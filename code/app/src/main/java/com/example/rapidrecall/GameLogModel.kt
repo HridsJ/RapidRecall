@@ -6,4 +6,4 @@ data class GameLogModel(
     val targetSequence: String,
     val isCorrect: Boolean,
     val timestamp: Long
-)
+) {}
