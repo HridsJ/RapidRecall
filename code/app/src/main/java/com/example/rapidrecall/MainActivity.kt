@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +32,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val gameRepository = GameRepository()
         setContent {
             RapidRecallTheme {
                 var currentScreen by remember { mutableStateOf("start") }
@@ -52,9 +54,18 @@ class MainActivity : ComponentActivity() {
                             onBackClick = {
                                 currentScreen = "start"
                             },
+                            onAttemptComplete = {
+                                gameRepository.addAttempt(it)
+                            },
                             modifier = Modifier.padding(innerPadding)
                         )
-                        "log" -> Text("Log Screen")
+                        "log" -> LogScreen(
+                            attempts = gameRepository.attempts,
+                            onBackClick = {
+                                currentScreen = "start"
+                            },
+                            modifier = Modifier.padding(innerPadding)
+                        )
                         "summary" -> Text("Summary Screen")
                     }
                 }
@@ -135,6 +146,7 @@ fun generateSequence(sequenceLength: Int): String {
 @Composable
 fun GameScreen(
     onBackClick: () -> Unit,
+    onAttemptComplete: (GameAttempt) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -142,6 +154,9 @@ fun GameScreen(
     var sequenceLength by remember { mutableStateOf(0) }
     var displayedDigit by remember { mutableStateOf("") }
     var showingSequence by remember { mutableStateOf(false) }
+    var userInput by remember { mutableStateOf("") }
+    var attemptFinished by remember { mutableStateOf(false) }
+    var resultText by remember { mutableStateOf("") }
 
     LaunchedEffect(targetSequence, showingSequence) {
 
@@ -190,12 +205,84 @@ fun GameScreen(
             )
         }
 
-        Button(
-            onClick = {
-                onBackClick()
+        if (!showingSequence && targetSequence.isNotEmpty() && !attemptFinished) {
+
+            Text(
+                text = "Enter the sequence:",
+                fontSize = 24.sp
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = userInput,
+                onValueChange = {
+                    userInput = it
+                },
+                label = {
+                    Text("Your Guess")
+                }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+
+                    if (userInput.isNotBlank()) {
+
+                        val correctAnswer = userInput == targetSequence
+
+                        if (correctAnswer) {
+                            resultText = "Correct!"
+                        } else {
+                            resultText = "Incorrect!"
+                        }
+
+                        val attempt = GameAttempt(
+                            sequenceLength = sequenceLength,
+                            userInput = userInput,
+                            targetSequence = targetSequence,
+                            isCorrect = correctAnswer,
+                            timestamp = System.currentTimeMillis()
+                        )
+
+                        onAttemptComplete(attempt)
+
+                        attemptFinished = true
+                    }
+                }
+            ) {
+                Text("Submit")
             }
-        ) {
-            Text("Back")
+        }
+
+        if (attemptFinished) {
+
+            Text(
+                text = resultText,
+                fontSize = 32.sp
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Correct sequence: $targetSequence"
+            )
+
+            Text(
+                text = "Your answer: $userInput"
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Button(
+                onClick = {
+                    onBackClick()
+                }
+            ) {
+                Text("Back to Start")
+            }
         }
     }
 }
