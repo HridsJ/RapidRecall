@@ -36,39 +36,39 @@ class MainActivity : ComponentActivity() {
         val notificationController = NotificationController(gameStartModel)
         setContent {
             RapidRecallTheme {
-                var currentScreen by remember { mutableStateOf("start") }
+                var currentActiveScreen by remember { mutableStateOf("start") }
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    when (currentScreen) {
+                    when (currentActiveScreen) {
                         "start" -> StartView(
                             onStartClick = {
-                                currentScreen = "game"
+                                currentActiveScreen = "game"
                             },
                             onLogClick = {
-                                currentScreen = "log"
+                                currentActiveScreen = "log"
                             },
                             onSummaryClick = {
-                                currentScreen = "summary"
+                                currentActiveScreen = "summary"
                             },
                             modifier = Modifier.padding(innerPadding)
                         )
                         "game" -> GameView(
                             notificationController = notificationController,
                             onBackClick = {
-                                currentScreen = "start"
+                                currentActiveScreen = "start"
                             },
                             modifier = Modifier.padding(innerPadding)
                         )
                         "log" -> LogView(
                             notificationController = notificationController,
                             onBackClick = {
-                                currentScreen = "start"
+                                currentActiveScreen = "start"
                             },
                             modifier = Modifier.padding(innerPadding)
                         )
                         "summary" -> SummaryView(
                             notificationController = notificationController,
                             onBackClick = {
-                                currentScreen = "start"
+                                currentActiveScreen = "start"
                             },
                             modifier = Modifier.padding(innerPadding)
                         )

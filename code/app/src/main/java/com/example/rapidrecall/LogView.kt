@@ -27,6 +27,7 @@ fun formatTimestamp(timestamp: Long): String {
     return format.format(Date(timestamp))
 }
 
+// display log screen of the attempts made
 @Composable
 fun LogView(
     notificationController: NotificationController,
@@ -39,18 +40,10 @@ fun LogView(
         modifier = modifier.fillMaxSize()
     ) {
         Text(
-            text = "Attempt Log",
+            text = "Log of Attempts",
             fontSize = 32.sp,
             modifier = Modifier.padding(16.dp)
         )
-        Button(
-            onClick = {
-                onBackClick()
-            },
-            modifier = Modifier.padding(horizontal = 16.dp)
-        ) {
-            Text("Back")
-        }
         Spacer(modifier = Modifier.height(16.dp))
 
         LazyColumn {
@@ -58,24 +51,34 @@ fun LogView(
                 Column(
                     modifier = Modifier.padding(16.dp)
                 ) {
+                    //format of output
                     Text(
-                        text = "Sequence Length: ${gameLog.sequenceLength}"
+                        text = "Length of the sequence: ${gameLog.sequenceLength}"
                     )
                     Text(
-                        text = "Target Sequence: ${gameLog.targetSequence}"
+                        text = "Sequence of expected target: ${gameLog.targetSequence}"
                     )
                     Text(
-                        text = "Your Input: ${gameLog.userInput}"
+                        text = "Sequence given: ${gameLog.userInput}"
                     )
                     Text(
                         text = if (gameLog.isCorrect) "Correct" else "Incorrect"
                     )
                     Text(
-                        text = "Time: ${formatTimestamp(gameLog.timestamp)}"
+                        text = "Date and time: ${formatTimestamp(gameLog.timestamp)}"
                     )
                 }
                 Spacer(modifier= Modifier.height(2.dp).fillMaxWidth())
             }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = {
+                onBackClick()
+            },
+            modifier = Modifier.padding(horizontal = 16.dp)
+        ) {
+            Text("Go Back")
         }
     }
 }

@@ -19,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import kotlin.text.iterator
 
+//shows the beginning screen of the whole app
 @Composable
 fun GameView(
     notificationController: NotificationController,
@@ -29,25 +29,26 @@ fun GameView(
 ) {
 
     var targetSequence by remember { mutableStateOf("") }
-    var displayedDigit by remember { mutableStateOf("") }
+    var currentShowingDigit by remember { mutableStateOf("") }
     var showingSequence by remember { mutableStateOf(false) }
     var userInput by remember { mutableStateOf("") }
     var completedGameLog by remember { mutableStateOf<GameLogModel?>(null) }
-    var showLine by remember { mutableStateOf(false) }
+    var showChangeIndicator by remember { mutableStateOf(false) }
 
     LaunchedEffect(targetSequence, showingSequence) {
         if (showingSequence) {
-            var digitPosition = 0
+            var currentIndexDigit = 0
 
-            while (digitPosition < targetSequence.length) {
-                displayedDigit = targetSequence[digitPosition].toString()
-                showLine = true
+            while (currentIndexDigit < targetSequence.length) {
+                currentShowingDigit = targetSequence[currentIndexDigit].toString()
+                // makes sure a lines comes and goes back when user sees number, so number repetition is clear
+                showChangeIndicator = true
                 delay(800)
-                showLine = false
+                showChangeIndicator = false
                 delay(200)
-                digitPosition++
+                currentIndexDigit++
             }
-            displayedDigit = ""
+            currentShowingDigit = ""
             showingSequence = false
         }
     }
@@ -57,14 +58,14 @@ fun GameView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        if (!showingSequence && targetSequence.isEmpty() && completedGameLog == null) {
+        //check for beginning of the game
+        val beginningGame = (!showingSequence && targetSequence.isEmpty() && completedGameLog == null)
+        if (beginningGame == true) {
             Text(
                 text = "How many digits would you like to recall?",
                 fontSize = 24.sp
             )
-
             Spacer(modifier = Modifier.height(16.dp))
-
             for (number in 1..10) {
                 Button(
                     onClick = {
@@ -76,13 +77,13 @@ fun GameView(
                 }
             }
         }
-
-        if (showingSequence) {
+        //print numbers on screen with small indicator to make repeating digits obvious
+        if (showingSequence == true) {
             Text(
-                text = displayedDigit,
+                text = currentShowingDigit,
                 fontSize = 48.sp
             )
-            if (showLine) {
+            if (showChangeIndicator) {
                 Text(
                     text = "---",
                     fontSize = 20.sp
@@ -90,34 +91,24 @@ fun GameView(
             }
         }
 
-        if (!showingSequence && targetSequence.isNotEmpty() && completedGameLog == null) {
+        //check if its time to ask for user input
+        val showingSequenceFinished = (!showingSequence && targetSequence.isNotEmpty() && completedGameLog == null)
+        if (showingSequenceFinished == true) {
 
             Text(
                 text = "Enter the sequence:",
                 fontSize = 24.sp
             )
-
             Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = userInput,
-                onValueChange = {
-                    userInput = it
-                },
-                label = {
-                    Text("Your Guess")
-                }
-            )
-
+            OutlinedTextField(value = userInput, onValueChange = { userInput = it }, label = { Text("Your Guess") })
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = { completedGameLog = notificationController.notifyGuessSubmitted(userInput) }
-            ) { Text("Submit") }
+            ) { Text("Submit Guess") }
         }
 
         val gameLog = completedGameLog
-
         if (gameLog != null) {
 
             Text(text = if (gameLog.isCorrect) "Correct!" else "Incorrect!", fontSize = 32.sp)
@@ -128,7 +119,7 @@ fun GameView(
             Button(
                 onClick = { onBackClick() }
             ) {
-                Text("Back to Start")
+                Text("Go Back")
             }
         }
     }

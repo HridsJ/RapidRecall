@@ -1,5 +1,6 @@
 package com.example.rapidrecall
 
+// prevents view from directly going to model
 class NotificationController(
     private val gameStartModel: GameStartModel
 ) {

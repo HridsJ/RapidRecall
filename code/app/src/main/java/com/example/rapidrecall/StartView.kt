@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+//displays the screen when user presses start
 @Composable
 fun StartView(
     onStartClick: () -> Unit,

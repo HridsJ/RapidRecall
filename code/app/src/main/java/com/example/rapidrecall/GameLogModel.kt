@@ -1,9 +1,9 @@
 package com.example.rapidrecall
-
+//model for storing logs data
 data class GameLogModel(
-    val sequenceLength: Int,
     val userInput: String,
-    val targetSequence: String,
     val isCorrect: Boolean,
-    val timestamp: Long
+    val targetSequence: String,
+    val timestamp: Long,
+    val sequenceLength: Int
 ) {}

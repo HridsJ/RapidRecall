@@ -34,28 +34,26 @@ fun SummaryView(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "Total Attempts: ${summary.totalAttempts}",
+            text = "Attempts you made: ${summary.totalAttempts}",
             fontSize = 20.sp
         )
 
         Text(
-            text = "Correct Attempts: ${summary.correctAttempts}",
+            text = "Attempts you got correct: ${summary.correctAttempts}",
             fontSize = 20.sp
         )
 
         Text(
-            text = "Accuracy: ${summary.accuracy.toInt()}%",
+            text = "Accuracy Percentage: ${summary.accuracy.toInt()}%",
             fontSize = 20.sp
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = {
-                onBackClick()
-            }
+            onClick = { onBackClick() }
         ) {
-            Text("Back")
+            Text("Go Back")
         }
     }
 }
