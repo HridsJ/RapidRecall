@@ -14,6 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rapidrecall.ui.theme.RapidRecallTheme
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -138,31 +140,56 @@ fun GameScreen(
 
     var targetSequence by remember { mutableStateOf("") }
     var sequenceLength by remember { mutableStateOf(0) }
+    var displayedDigit by remember { mutableStateOf("") }
+    var showingSequence by remember { mutableStateOf(false) }
 
+    LaunchedEffect(targetSequence, showingSequence) {
+
+        if (showingSequence && targetSequence.isNotEmpty()) {
+
+            for (digit in targetSequence) {
+                displayedDigit = digit.toString()
+                delay(1000)
+            }
+
+            displayedDigit = ""
+            showingSequence = false
+        }
+    }
 
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        if (!showingSequence && targetSequence.isEmpty()) {
+            Text(
+                text = "How many digits would you like to recall?",
+                fontSize = 24.sp
+            )
 
-        Text(
-            text = "How many digits would you like to recall?",
-            fontSize = 24.sp
-        )
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        for (number in 1..10) {
-            Button(
-                onClick = {
-                    sequenceLength = number
-                    targetSequence = generateSequence(number)
+            for (number in 1..10) {
+                Button(
+                    onClick = {
+                        sequenceLength = number
+                        targetSequence = generateSequence(number)
+                        showingSequence = true
+                    }
+                ) {
+                    Text("$number")
                 }
-            ) {
-                Text("$number")
             }
         }
+
+        if (showingSequence) {
+            Text(
+                text = displayedDigit,
+                fontSize = 48.sp
+            )
+        }
+
         Button(
             onClick = {
                 onBackClick()
