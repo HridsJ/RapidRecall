@@ -47,10 +47,6 @@ fun GameView(
                 delay(200)
                 digitPosition++
             }
-
-            displayedDigit = ""
-            showingSequence = false
-
             displayedDigit = ""
             showingSequence = false
         }
@@ -88,7 +84,7 @@ fun GameView(
             )
             if (showLine) {
                 Text(
-                    text = "->",
+                    text = "---",
                     fontSize = 20.sp
                 )
             }
