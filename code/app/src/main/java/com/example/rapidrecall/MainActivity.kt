@@ -66,7 +66,15 @@ class MainActivity : ComponentActivity() {
                             },
                             modifier = Modifier.padding(innerPadding)
                         )
-                        "summary" -> Text("Summary Screen")
+                        "summary" -> SummaryScreen(
+                            totalAttempts = gameRepository.getTotalAttempts(),
+                            correctAttempts = gameRepository.getCorrectAttempts(),
+                            accuracy = gameRepository.getAccuracy(),
+                            onBackClick = {
+                                currentScreen = "start"
+                            },
+                            modifier = Modifier.padding(innerPadding)
+                        )
                     }
                 }
             }
