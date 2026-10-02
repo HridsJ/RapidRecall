@@ -46,7 +46,12 @@ class MainActivity : ComponentActivity() {
                             },
                             modifier = Modifier.padding(innerPadding)
                         )
-                        "game" -> Text("Game Screen")
+                        "game" -> GameScreen(
+                            onBackClick = {
+                                currentScreen = "start"
+                            },
+                            modifier = Modifier.padding(innerPadding)
+                        )
                         "log" -> Text("Log Screen")
                         "summary" -> Text("Summary Screen")
                     }
@@ -134,6 +139,7 @@ fun GameScreen(
     var targetSequence by remember { mutableStateOf("") }
     var sequenceLength by remember { mutableStateOf(0) }
 
+
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -148,7 +154,6 @@ fun GameScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         for (number in 1..10) {
-
             Button(
                 onClick = {
                     sequenceLength = number
@@ -158,7 +163,6 @@ fun GameScreen(
                 Text("$number")
             }
         }
-
         Button(
             onClick = {
                 onBackClick()
