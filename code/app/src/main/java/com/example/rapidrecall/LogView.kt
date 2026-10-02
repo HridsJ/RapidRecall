@@ -20,7 +20,7 @@ import java.util.Locale
 
 fun formatTimestamp(timestamp: Long): String {
     val format = SimpleDateFormat(
-        "yyyy-MM-dd HH:mm:ss",
+        "dd-MM-yyyy HH:mm:ss",
         Locale.getDefault()
     )
 
