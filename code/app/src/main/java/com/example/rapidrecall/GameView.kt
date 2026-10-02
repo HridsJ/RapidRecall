@@ -33,15 +33,23 @@ fun GameView(
     var showingSequence by remember { mutableStateOf(false) }
     var userInput by remember { mutableStateOf("") }
     var completedGameLog by remember { mutableStateOf<GameLogModel?>(null) }
+    var showLine by remember { mutableStateOf(false) }
 
     LaunchedEffect(targetSequence, showingSequence) {
+        if (showingSequence) {
+            var digitPosition = 0
 
-        if (showingSequence && targetSequence.isNotEmpty()) {
-
-            for (digit in targetSequence) {
-                displayedDigit = digit.toString()
-                delay(1000)
+            while (digitPosition < targetSequence.length) {
+                displayedDigit = targetSequence[digitPosition].toString()
+                showLine = true
+                delay(800)
+                showLine = false
+                delay(200)
+                digitPosition++
             }
+
+            displayedDigit = ""
+            showingSequence = false
 
             displayedDigit = ""
             showingSequence = false
@@ -78,6 +86,12 @@ fun GameView(
                 text = displayedDigit,
                 fontSize = 48.sp
             )
+            if (showLine) {
+                Text(
+                    text = "->",
+                    fontSize = 20.sp
+                )
+            }
         }
 
         if (!showingSequence && targetSequence.isNotEmpty() && completedGameLog == null) {

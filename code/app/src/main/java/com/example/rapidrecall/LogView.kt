@@ -52,35 +52,29 @@ fun LogView(
             Text("Back")
         }
         Spacer(modifier = Modifier.height(16.dp))
-        if (gameLogs.isEmpty()) {
-            Text(
-                text = "No attempts yet.",
-                modifier = Modifier.padding(16.dp)
-            )
-        } else {
-            LazyColumn {
-                items(gameLogs) { gameLog ->
-                    Column(
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text(
-                            text = "Sequence Length: ${gameLog.sequenceLength}"
-                        )
-                        Text(
-                            text = "Target Sequence: ${gameLog.targetSequence}"
-                        )
-                        Text(
-                            text = "Your Input: ${gameLog.userInput}"
-                        )
-                        Text(
-                            text = if (gameLog.isCorrect) "Correct" else "Incorrect"
-                        )
-                        Text(
-                            text = "Time: ${formatTimestamp(gameLog.timestamp)}"
-                        )
-                    }
-                    Spacer(modifier= Modifier.height(2.dp).fillMaxWidth())
+
+        LazyColumn {
+            items(gameLogs) { gameLog ->
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(
+                        text = "Sequence Length: ${gameLog.sequenceLength}"
+                    )
+                    Text(
+                        text = "Target Sequence: ${gameLog.targetSequence}"
+                    )
+                    Text(
+                        text = "Your Input: ${gameLog.userInput}"
+                    )
+                    Text(
+                        text = if (gameLog.isCorrect) "Correct" else "Incorrect"
+                    )
+                    Text(
+                        text = "Time: ${formatTimestamp(gameLog.timestamp)}"
+                    )
                 }
+                Spacer(modifier= Modifier.height(2.dp).fillMaxWidth())
             }
         }
     }

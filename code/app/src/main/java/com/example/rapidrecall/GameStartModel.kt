@@ -76,10 +76,7 @@ class GameStartModel {
         }
 
         var accuracy = 0.0
-
-        if (totalAttempts != 0) {
-            accuracy = correctAttempts.toDouble() / totalAttempts * 100
-        }
+        if (totalAttempts != 0) { accuracy = correctAttempts.toDouble() / totalAttempts * 100 }
 
         return GameSummaryModel(
             totalAttempts = totalAttempts,
