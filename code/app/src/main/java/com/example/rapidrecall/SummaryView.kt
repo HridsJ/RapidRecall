@@ -14,14 +14,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun SummaryScreen(
-    totalAttempts: Int,
-    correctAttempts: Int,
-    accuracy: Double,
+fun SummaryView(
+    notificationController: NotificationController,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-
+    val summary = notificationController.notifySummaryRequested()
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -36,17 +34,17 @@ fun SummaryScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "Total Attempts: $totalAttempts",
+            text = "Total Attempts: ${summary.totalAttempts}",
             fontSize = 20.sp
         )
 
         Text(
-            text = "Correct Attempts: $correctAttempts",
+            text = "Correct Attempts: ${summary.correctAttempts}",
             fontSize = 20.sp
         )
 
         Text(
-            text = "Accuracy: ${accuracy.toInt()}%",
+            text = "Accuracy: ${summary.accuracy.toInt()}%",
             fontSize = 20.sp
         )
 

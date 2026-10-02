@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,22 +28,21 @@ fun formatTimestamp(timestamp: Long): String {
 }
 
 @Composable
-fun LogScreen(
-    attempts: List<GameAttempt>,
+fun LogView(
+    notificationController: NotificationController,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val gameLogs = notificationController.notifyLogRequested()
 
     Column(
         modifier = modifier.fillMaxSize()
     ) {
-
         Text(
             text = "Attempt Log",
             fontSize = 32.sp,
             modifier = Modifier.padding(16.dp)
         )
-
         Button(
             onClick = {
                 onBackClick()
@@ -53,47 +51,34 @@ fun LogScreen(
         ) {
             Text("Back")
         }
-
         Spacer(modifier = Modifier.height(16.dp))
-
-        if (attempts.isEmpty()) {
-
+        if (gameLogs.isEmpty()) {
             Text(
                 text = "No attempts yet.",
                 modifier = Modifier.padding(16.dp)
             )
-
         } else {
-
             LazyColumn {
-
-                items(attempts) { attempt ->
-
+                items(gameLogs) { gameLog ->
                     Column(
                         modifier = Modifier.padding(16.dp)
                     ) {
-
                         Text(
-                            text = "Sequence Length: ${attempt.sequenceLength}"
+                            text = "Sequence Length: ${gameLog.sequenceLength}"
                         )
-
                         Text(
-                            text = "Target Sequence: ${attempt.targetSequence}"
+                            text = "Target Sequence: ${gameLog.targetSequence}"
                         )
-
                         Text(
-                            text = "Your Input: ${attempt.userInput}"
+                            text = "Your Input: ${gameLog.userInput}"
                         )
-
                         Text(
-                            text = if (attempt.isCorrect) "Correct" else "Incorrect"
+                            text = if (gameLog.isCorrect) "Correct" else "Incorrect"
                         )
-
                         Text(
-                            text = "Time: ${formatTimestamp(attempt.timestamp)}"
+                            text = "Time: ${formatTimestamp(gameLog.timestamp)}"
                         )
                     }
-
                     Spacer(modifier= Modifier.height(2.dp).fillMaxWidth())
                 }
             }
